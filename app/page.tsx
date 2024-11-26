@@ -11,9 +11,6 @@ export default function Page() {
 
 Proficient in TypeScript and JavaScript, I combine my knowledge of DSA, DBMS, OS, and Computer Networks to design and implement optimized solutions. Whether tackling complex backend systems or crafting intuitive frontends, I am driven by a commitment to clean, maintainable, and impactful code.`}
       </p>
-      <div className="my-8">
-        <BlogPosts />
-      </div>
     </section>
   )
 }
