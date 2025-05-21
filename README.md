@@ -1,42 +1,65 @@
-# Portfolio Blog Starter
+# 🧠 AI Agents Playground
 
-This is a porfolio site template complete with a blog. Includes:
+Welcome to the **AI Agents Playground**! This repository is a hands-on project where I learn, build, and experiment with autonomous AI agents. It’s a work-in-progress and a personal sandbox for exploring how agents can think, reason, plan, and interact with the world.
 
-- MDX and Markdown support
-- Optimized for SEO (sitemap, robots, JSON-LD schema)
-- RSS Feed
-- Dynamic OG images
-- Syntax highlighting
-- Tailwind v4
-- Vercel Speed Insights / Web Analytics
-- Geist font
+## 🚀 Goals
 
-## Demo
+- Learn the fundamentals of AI agents
+- Build modular and scalable agent architectures
+- Explore memory, planning, tool use, and environment interaction
+- Integrate with LLMs (e.g., OpenAI, HuggingFace, etc.)
+- Experiment with frameworks like LangChain, AutoGPT, and others
 
-https://portfolio-blog-starter.vercel.app
+## 🏗️ Project Structure
 
-## How to Use
-
-You can choose from one of the following two methods to use this repository:
-
-### One-Click Deploy
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/solutions/blog&project-name=blog&repository-name=blog)
-
-### Clone and Deploy
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
-
-```bash
-pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/blog blog
 ```
 
-Then, run Next.js in development mode:
+ai-agents/
+│
+├── agents/           # Core agent logic and classes
+├── tools/            # External tools agents can use (e.g., search, calculator)
+├── memory/           # Vector stores, memory logic
+├── planners/         # Task and goal management logic
+├── environments/     # Simulated or real environments
+├── prompts/          # Prompt templates and prompt engineering work
+├── notebooks/        # Experiments, analysis, and playgrounds
+├── tests/            # Unit tests and integration tests
+└── main.py           # Entry point / CLI runner
+
+````
+
+## ⚙️ Tech Stack
+
+- Python 3.10+
+- OpenAI / Anthropic APIs
+- LangChain / LlamaIndex (optional)
+- FAISS / Chroma for memory
+- Streamlit or CLI interface
+- Others coming as the project evolves...
+
+## 📦 Installation
 
 ```bash
-pnpm dev
-```
+git clone https://github.com/OmSharma42306/ai-agents.git
+cd ai-agents
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+````
 
-Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+
+
+## 📚 Learning Resources
+
+* [BabyAGI](https://github.com/yoheinakajima/babyagi)
+* [AutoGPT](https://github.com/Torantulino/Auto-GPT)
+* [LangChain](https://docs.langchain.com/)
+* [OpenAI Cookbook](https://github.com/openai/openai-cookbook)
+* [AI Agent Papers](https://github.com/samber/awesome-ai-agents)
+
+## 🛠️ Todo
+
+* [ ] Implement memory persistence
+* [ ] Add long-term planning module
+* [ ] Connect to real-world APIs
+* [ ] Build web interface (Streamlit or Flask)
