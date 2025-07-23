@@ -1,5 +1,6 @@
 import { Together } from "together-ai";
 import dotenv from "dotenv";
+import axios from "axios";
 dotenv.config();
 
 const together = new Together({
@@ -53,9 +54,12 @@ const SYSTEM_PROMPT = `
         {"step":"string","tool":"string","input": "string","content":"string"}
 `
 
-function fetchWeather(city:string){
-    console.log("City omya",city);
-    return "21 Degree C";
+async function fetchWeather(city:string){
+     const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.Weather_api}`);
+        const data =  response.data;
+        const temperature = Number(data.main.temp - 273.15).toFixed(2);
+        return `${temperature} for this ${city}` ;
+    
 }
 
 
@@ -67,32 +71,32 @@ async function runAgent(){
     
     let messages : any = [  
         { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: "What is the Weather of Rabakavi ?" },
+        { role: "user", content: "What is the Weather of Terdal and Mudhol ?" },
     ];
 
 
     while(true){
         
-        const d = await callLllm(messages);
-        let me = { role : "assistant",content : JSON.stringify(d)}
+        const parsed_message = await callLllm(messages);
+        let me = { role : "assistant",content : JSON.stringify(parsed_message)}
         messages.push(me)
 
-        if(d.step === "think"){
-            console.log(`🧠 ${d.content}`)
+        if(parsed_message.step === "think"){
+            console.log(`🧠 ${parsed_message.content}`)
             continue;
         } 
-        if(d.step === "action" && d.tool === "fetchWeather"){
-            const toolName = d.tool;
-            const input = d.input;
-            const weatherData = tools[toolName](input);
-            console.log("Weather Data : ",weatherData);
+        if(parsed_message.step === "action" && parsed_message.tool === "fetchWeather"){
+            const toolName = parsed_message.tool;
+            const input = parsed_message.input;
+            console.log(` 🔨 ${toolName} tool is Using to Weather of ${input}`)
+            const weatherData = await tools[toolName](input);
     
             let toolMessage = { role : "assistant",content : JSON.stringify({"step":"observe","content":`${weatherData}`}) };
             messages.push(toolMessage);
             continue;
         }
-        if(d.step === "output"){
-            console.log("Final Step",d.content);
+        if(parsed_message.step === "output"){
+            console.log(` 🤖 ${parsed_message.content}`);
             break;
         }
     }
@@ -117,9 +121,7 @@ async function callLllm(messages : any){
 }
 
 async function main(){
-    // await callLllm();
-    await runAgent()
-    // await ss();
+    await runAgent();
 }
 
 main();
