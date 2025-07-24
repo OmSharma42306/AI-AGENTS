@@ -1,6 +1,10 @@
 import { Together } from "together-ai";
 import dotenv from "dotenv";
 import axios from "axios";
+import { spawn,exec } from "node:child_process"
+import { stderr } from "node:process";
+import { resolve } from "node:path";
+import { rejects } from "node:assert";
 dotenv.config();
 
 const together = new Together({
@@ -28,6 +32,7 @@ const SYSTEM_PROMPT = `
     
     Available Tools: 
      - fetchWeather(city : string) -> string
+     - executeCommand(command : string) -> string , description : so this function executes a given linux commands on user's machine and returns the STDOUT and STDERR.
 
     Example : 
     
@@ -62,16 +67,32 @@ async function fetchWeather(city:string){
     
 }
 
+async function executeCommand(command : string){
+    return new Promise((resolve,reject)=>{
+        exec(command,(err,stdout,stderr)=>{
+        if(err){
+            console.error(err);
+            resolve(err)
+        }else{
+            console.log(stdout);
+        resolve(stdout.trim());
+        }
+        
+    })
+    })
+    
+}
 
 const tools:any =  {
-    fetchWeather : fetchWeather
+    fetchWeather : fetchWeather,
+    executeCommand : executeCommand,
 }
 
 async function runAgent(){
     
     let messages : any = [  
         { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: "What is the Weather of Terdal and Mudhol ?" },
+        { role: "user", content: "Can you create a basic todo app using HTML, CSS, and JS? Use the `executeCommand` tool to write the files to disk. Create 3 files: index.html, style.css, script.js." },
     ];
 
 
@@ -86,6 +107,16 @@ async function runAgent(){
             continue;
         } 
         if(parsed_message.step === "action" && parsed_message.tool === "fetchWeather"){
+            const toolName = parsed_message.tool;
+            const input = parsed_message.input;
+            console.log(` 🔨 ${toolName} tool is Using to Weather of ${input}`)
+            const weatherData = await tools[toolName](input);
+    
+            let toolMessage = { role : "assistant",content : JSON.stringify({"step":"observe","content":`${weatherData}`}) };
+            messages.push(toolMessage);
+            continue;
+        }
+        if(parsed_message.step === "action" && parsed_message.tool === "executeCommand"){
             const toolName = parsed_message.tool;
             const input = parsed_message.input;
             console.log(` 🔨 ${toolName} tool is Using to Weather of ${input}`)
